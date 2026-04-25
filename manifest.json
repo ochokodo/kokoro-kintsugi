@@ -1,0 +1,26 @@
+{
+  "name": "こころの金継ぎ",
+  "short_name": "金継ぎ",
+  "description": "夫の浮気・不倫という嵐の中で、気質を知ったうえでAIおちょこと話せるアプリ。",
+  "start_url": "/kokoro-kintsugi/",
+  "scope": "/kokoro-kintsugi/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDFCFA",
+  "theme_color": "#B8934A",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
