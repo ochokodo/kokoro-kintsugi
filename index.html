@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>こころの金継ぎ｜おちょこ堂</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Maru+Gothic:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Klee+One:wght@400;600&family=Zen+Kurenaido&family=Reggae+One&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="こころの金継ぎ">
+<meta name="theme-color" content="#B8934A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root {
+  /* === NEW DESIGN TOKENS (v29) === */
+  --bg: #FDFCFA;
+  --bg2: #F5F2EC;
+  --card: #FBFAF5;
+  --text: #1C1A16;
+  --text-mid: #6B6759;
+  --text-light: #A8A495;
+  --border: #D9D3C2;
+  --border2: #E8E3D4;
+  --accent: #2B3A2C;
+  --accent2: #4A6B4C;
+  --accent-light: #EEF2EE;
+  --gold: #B8934A;
+  --gold-light: #F8F2E4;
+  /* 気質カラー (updated) */
+  --fire: #B8543A;
+  --moon: #C9A24A;
+  --wind: #4A7AA8;
+  --forest: #5B8062;
+  --fire-light: #FAF0EC;
+  --moon-light: #EEF4F8;
+  --wind-light: #EEF4EE;
+  --forest-light: #F0EEE4;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Noto Sans JP',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; font-weight:300; }
+
+.screen { display:none; }
+.screen.active { display:block; }
+#screen-chat.active { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+#screen-top.active, #screen-step1.active, #screen-step2.active, #screen-result.active { min-height:100vh; overflow-y:auto; }
+
+@keyframes bounceUp { 
+  0% { opacity:0; transform:translateY(24px); }
+  65% { opacity:1; transform:translateY(-8px); }
+  82% { transform:translateY(4px); }
+  100% { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
+@keyframes bounce { 0%,80%,100%{transform:scale(0);}40%{transform:scale(1);} }
+@keyframes pulse { 0%,100%{opacity:0.3;}50%{opacity:1;} }
+.fade-in { animation:fadeUp 0.5s ease both; }
+
+/* ── TOP (v29 redesign) ── */
+#screen-top {
+  background: var(--bg);
+  overflow-y: auto;
+  position: relative;
+}
+.top-paper-texture {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  opacity: 0.5;
+  background-image: radial-gradient(#F0EDE4 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+.top-gold-line {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  width: 100%; height: 100%;
+}
+.top-inner {
+  max-width: 390px; width: 100%;
+  margin: 0 auto;
+  padding: 100px 32px 40px;
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.8s ease both;
+}
+.top-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px; letter-spacing: 3px;
+  color: var(--text-light);
+  margin-bottom: 48px;
+}
+.top-title-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 14px;
+}
+.top-title-text {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 300;
+  font-size: 40px; line-height: 1.4; letter-spacing: 4px;
+  flex-shrink: 0;
+  color: var(--text);
+}
+.top-vase-wrap {
+  flex: 1; position: relative;
+  min-height: 140px; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+}
+.top-vase-circle {
+  width: 130px; height: 130px; border-radius: 50%;
+  position: relative; overflow: hidden;
+  background: var(--bg);
+}
+.top-vase-circle img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 55% 45%;
+  filter: saturate(0.88) contrast(1.0);
+  display: block;
+}
+.top-vase-fade {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at center, transparent 50%, #FDFCFAcc 80%, #FDFCFA 100%);
+  pointer-events: none;
+}
+.top-vase-shadow {
+  position: absolute; inset: 0; border-radius: 50%;
+  box-shadow: inset 0 0 20px #EEEAE0;
+  pointer-events: none;
+}
+.top-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px; letter-spacing: 1.5px;
+  color: var(--text-mid);
+  margin-bottom: 44px;
+}
+.top-tagline {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 300;
+  font-size: 16px; line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 52px;
+  max-width: 280px;
+}
+.top-types-rail {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  padding: 18px 0;
+  margin-bottom: 36px;
+}
+.top-type-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 4px 0;
+  border-left: 0.5px solid var(--border);
+}
+.top-type-cell:first-child { border-left: none; }
+.top-type-kanji {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 15px; font-weight: 400;
+  color: var(--text); letter-spacing: 2px;
+}
+.top-type-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px; color: var(--text-light); letter-spacing: 1px;
+}
+.top-type-kw {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 11px; color: var(--text-light);
+  letter-spacing: 0.5px; line-height: 1.6;
+  text-align: center;
+}
+.top-spacer { flex: 1; }
+.top-cta {
+  display: block; width: 100%;
+  background: #D4A090; color: #F6F4EF;
+  border: none; border-radius: 999px;
+  padding: 20px 0;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 14px; font-weight: 400; letter-spacing: 3px;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  transition: opacity 0.2s;
+}
+.top-cta:hover { opacity: 0.85; }
+.top-cta-note {
+  text-align: center; margin-top: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px; color: var(--text-light); letter-spacing: 1.5px;
+}
+.top-returning-cta {
+  display: block; width: 100%;
+  background: #D4A090; color: #F6F4EF;
+  border: none; border-radius: 999px;
+  padding: 20px 0;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 14px; font-weight: 400; letter-spacing: 3px;
+  cursor: pointer; margin-bottom: 12px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  transition: opacity 0.2s;
+}
+.top-returning-cta:hover { opacity: 0.85; }
+#returning-section { display: none; }
+
+/* keep btn-start for result/profile screens */
+.btn-start { display:block; width:100%; background:#D4A090; color:#F6F4EF; border:none; border-radius:999px; padding:17px; font-family:'Zen Maru Gothic',sans-serif; font-size:14px; font-weight:400; letter-spacing:2px; cursor:pointer; transition:all 0.25s; box-shadow:0 1px 0 rgba(0,0,0,0.08); margin-bottom:12px; }
+.btn-start:hover { opacity:0.85; }
+
+/* ── QUESTIONS ── */
+.q-header { padding:36px 24px 20px; border-bottom:1px solid var(--border); background:var(--bg); flex-shrink:0; }
+.q-badge { font-family:'DM Serif Display',serif; font-size:9px; letter-spacing:3px; color:var(--text-light); text-transform:uppercase; margin-bottom:10px; display:inline-block; }
+.q-title { font-family:'Noto Serif JP',serif; font-size:18px; font-weight:300; line-height:1.6; }
+.q-sub { font-size:12px; color:var(--text-light); margin-top:6px; line-height:1.9; }
+.q-body { flex:1; padding:24px 24px 48px; overflow-y:auto; }
+.q-list { display:flex; flex-direction:column; gap:28px; }
+.q-item {}
+.q-text { font-size:13px; line-height:1.9; margin-bottom:14px; color:var(--text); }
+.scale-row { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.scale-btn { border:1px solid var(--border); border-radius:10px; padding:10px 4px; background:var(--card); cursor:pointer; font-size:10px; color:var(--text-light); font-family:'Noto Sans JP',sans-serif; transition:all 0.18s; text-align:center; line-height:1.5; }
+.scale-btn:hover { border-color:var(--accent2); background:var(--accent-light); }
+.scale-btn.selected { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
+.q-nav { padding:16px 24px 36px; background:var(--bg); border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-shrink:0; }
+.btn-back { background:none; border:1px solid var(--border); border-radius:50px; padding:12px 20px; font-size:12px; color:var(--text-light); cursor:pointer; font-family:'Noto Sans JP',sans-serif; }
+.btn-next { background:#D4A090; color:#F6F4EF; border:none; border-radius:999px; padding:13px 28px; font-size:13px; cursor:pointer; flex:1; transition:all 0.2s; box-shadow:0 1px 0 rgba(0,0,0,0.08); font-family:'Zen Maru Gothic',sans-serif; }
+.btn-next:disabled { background:var(--border2); cursor:default; box-shadow:none; color:var(--text-light); }
+.btn-next:not(:disabled):hover { opacity:0.85; }
+
+/* ── RESULT ── */
+#screen-result { background:var(--bg); overflow-y:auto; }.result-hero { padding:48px 24px 36px; text-align:center; border-bottom:1px solid var(--border); }
+.result-label { font-family:'DM Serif Display',serif; font-size:9px; letter-spacing:4px; color:var(--text-light); margin-bottom:20px; text-transform:uppercase; }
+.result-type { font-family:'Zen Maru Gothic',sans-serif; font-size:30px; font-weight:300; margin-bottom:6px; }
+.result-kw { font-size:12px; color:var(--text-light); letter-spacing:1px; }
+.result-section { padding:28px 24px; border-bottom:1px solid var(--border); }
+.section-label { font-family:'DM Serif Display',serif; font-size:9px; letter-spacing:3px; color:var(--text-light); margin-bottom:18px; text-transform:uppercase; }
+
+/* グラフ */
+.graph-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.graph-label { width:32px; font-size:11px; text-align:right; }
+.graph-bar-wrap { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.graph-bar { height:100%; border-radius:2px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); width:0%; }
+.graph-pct { width:34px; font-size:11px; color:var(--text-light); text-align:right; }
+
+/* 気質説明 */
+.type-desc-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:14px; }
+.type-desc-name { font-family:'Zen Maru Gothic',sans-serif; font-size:16px; font-weight:400; margin-bottom:10px; }
+.type-desc-text { font-size:13px; line-height:2.1; color:var(--text-mid); }
+
+/* インサイトカード */
+.insight-card { background:var(--gold-light); border:1px solid #E4D4A0; border-radius:var(--radius); padding:22px; }
+.insight-text { font-family:'Noto Serif JP',serif; font-size:13px; line-height:2.3; color:var(--text); }
+
+/* 回復タイプ */
+.recovery-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px; }
+.recovery-title { font-size:14px; font-weight:400; margin-bottom:10px; }
+.recovery-text { font-size:13px; line-height:2.1; color:var(--text-mid); }
+
+/* ── CHAT ── */
+#screen-chat { background:var(--bg); }
+.chat-header { padding:18px 20px 14px; border-bottom:1px solid var(--border); background:var(--bg); display:flex; align-items:center; gap:12px; flex-shrink:0; position:sticky; top:0; z-index:10; }
+.chat-avatar { width:38px; height:38px; background:var(--accent-light); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; border:1.5px solid var(--border); }
+.chat-name { font-family:'Noto Serif JP',serif; font-size:14px; font-weight:400; }
+.chat-status { font-size:10px; color:var(--accent2); margin-top:1px; display:flex; align-items:center; gap:4px; }
+.status-dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); animation:pulse 2s infinite; }
+.chat-menu { margin-left:auto; background:none; border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:11px; color:var(--text-light); cursor:pointer; font-family:'Noto Sans JP',sans-serif; }
+
+.chat-messages { flex:1; overflow-y:auto; padding:20px 16px 8px; display:flex; flex-direction:column; gap:14px; }
+
+.msg-row { display:flex; align-items:flex-end; gap:8px; animation:fadeUp 0.3s ease both; }
+.msg-row.user { flex-direction:row-reverse; }
+.msg-av { width:30px; height:30px; background:var(--accent-light); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; border:1px solid var(--border); }
+.msg-av.user-av { background:var(--border2); border-color:transparent; font-size:12px; }
+
+.bubble { max-width:80%; padding:12px 16px; border-radius:18px; font-family:'Noto Serif JP',serif; font-size:14px; line-height:1.9; font-weight:300; }
+.bubble.ai { background:var(--card); border:1px solid var(--border); color:var(--text); border-bottom-left-radius:4px; }
+.bubble.user { background:var(--accent); color:#fff; border-bottom-right-radius:4px; font-family:'Noto Sans JP',sans-serif; }
+.bubble.typing { background:var(--card); border:1px solid var(--border); padding:14px 18px; border-bottom-left-radius:4px; }
+.typing-dots { display:flex; gap:5px; align-items:center; }
+.typing-dots span { width:6px; height:6px; border-radius:50%; background:var(--text-light); animation:pulse 1.2s infinite ease-in-out; }
+.typing-dots span:nth-child(2){animation-delay:0.2s;}
+.typing-dots span:nth-child(3){animation-delay:0.4s;}
+
+.msg-time { font-size:9px; color:var(--text-light); margin-top:4px; padding:0 4px; align-self:flex-end; }
+
+/* スターター */
+.starters-wrap { padding:8px 16px 12px; display:flex; flex-wrap:wrap; gap:8px; flex-shrink:0; }
+.starter { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:8px 14px; font-size:12px; color:var(--text-mid); font-family:'Noto Sans JP',sans-serif; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+.starter:hover { border-color:var(--accent2); color:var(--accent); background:var(--accent-light); }
+
+/* インプット */
+.chat-input-wrap { padding:10px 14px 28px; border-top:1px solid var(--border); background:var(--bg); display:flex; gap:10px; align-items:flex-end; flex-shrink:0; }
+.chat-input { flex:1; background:var(--card); border:1px solid var(--border); border-radius:22px; padding:12px 18px; font-family:'Noto Serif JP',serif; font-size:14px; font-weight:300; color:var(--text); resize:none; line-height:1.6; max-height:120px; outline:none; transition:border-color 0.2s; }
+.chat-input:focus { border-color:var(--accent2); }
+.chat-input::placeholder { color:var(--text-light); }
+.send-btn { width:44px; height:44px; background:var(--accent); border:none; border-radius:50%; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; box-shadow:0 2px 10px rgba(44,62,45,0.2); }
+.send-btn:hover { background:#1E2E1F; transform:scale(1.05); }
+.send-btn:disabled { background:var(--border2); cursor:default; box-shadow:none; transform:none; }
+.send-btn svg { width:18px; height:18px; fill:none; stroke:white; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* プロフィール */
+#screen-profile { background:var(--bg); overflow-y:auto; }
+.profile-inner { padding:48px 24px; max-width:420px; margin:0 auto; }
+
+/* ローディング */
+#screen-loading { background:var(--bg); align-items:center; justify-content:center; }
+.loading-inner { text-align:center; padding:40px; }
+.loading-label { font-family:'DM Serif Display',serif; font-size:10px; letter-spacing:3px; color:var(--text-light); margin-bottom:28px; text-transform:uppercase; }
+.loading-dots { display:flex; justify-content:center; gap:8px; margin-bottom:28px; }
+.loading-dots span { width:7px; height:7px; border-radius:50%; background:var(--accent2); animation:bounce 1.2s infinite ease-in-out; }
+.loading-dots span:nth-child(2){animation-delay:0.2s;background:var(--gold);}
+.loading-dots span:nth-child(3){animation-delay:0.4s;background:var(--moon);}
+.loading-poem { font-family:'Noto Serif JP',serif; font-size:13px; line-height:2.4; color:var(--text-light); }
+
+/* ── KINTSUGI POPUP ── */
+.kintsugi-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(28,26,22,0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 32px;
+  animation: fadeUp 0.3s ease both;
+}
+.kintsugi-popup {
+  background: #FDFCFA;
+  border-radius: 50%;
+  width: 320px; height: 320px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 62px 55px 72px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18), 0 0 0 4px #B8934A;
+  position: relative;
+  animation: bounceUp 0.5s ease both;
+}
+.kintsugi-popup::before {
+  display: none;
+}
+.kintsugi-popup-text {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #1C1A16;
+  letter-spacing: 0.3px;
+}
+.kintsugi-close {
+  position: absolute; bottom: -48px; left: 50%;
+  transform: translateX(-50%);
+  background: none; border: 0.5px solid rgba(255,255,255,0.5);
+  border-radius: 50px; padding: 8px 24px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 11px; color: rgba(255,255,255,0.8);
+  cursor: pointer; letter-spacing: 1px;
+}
+.top-vase-circle { cursor: pointer; }
+
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+/* ── PAYWALL ── */
+.paywall-wrap { padding:8px 16px 20px; }
+.paywall-msg { background:var(--gold-light); border:1px solid #E4D4A0; border-radius:18px; border-bottom-left-radius:4px; padding:20px 22px; font-family:'Noto Serif JP',serif; font-size:14px; line-height:2.2; color:var(--text); margin-bottom:16px; }
+.paywall-cta { font-size:12px; color:var(--text-mid); line-height:2.0; margin-bottom:16px; text-align:center; font-family:'Noto Serif JP',serif; }
+.paywall-btn { display:block; width:100%; background:#D4A090; color:#F6F4EF; border:none; border-radius:999px; padding:16px; font-family:'Zen Maru Gothic',sans-serif; font-size:14px; font-weight:400; letter-spacing:1px; cursor:pointer; transition:all 0.25s; box-shadow:0 1px 0 rgba(0,0,0,0.08); }
+.paywall-btn:hover { background:#1E2E1F; transform:translateY(-1px); }
+.paywall-price { font-size:11px; color:var(--text-light); text-align:center; margin-top:10px; line-height:1.8; }
+.input-disabled { opacity:0.4; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<!-- ===== TOP ===== -->
+<div id="screen-top" class="screen active">
+  <!-- paper texture -->
+  <div class="top-paper-texture"></div>
+  <!-- gold kintsugi line -->
+  <svg class="top-gold-line" viewBox="0 0 390 904" preserveAspectRatio="none">
+    <path d="M -10 420 Q 120 405, 230 430 T 410 418"
+      fill="none" stroke="#B8934A" stroke-width="0.6" opacity="0.55"/>
+    <circle cx="230" cy="427" r="1.3" fill="#B8934A" opacity="0.7"/>
+  </svg>
+
+  <div class="top-inner">
+    <!-- brand mark -->
+    <div class="top-brand">Ochoko-do &nbsp;·&nbsp; est. 2025</div>
+
+    <!-- title + vase photo -->
+    <div class="top-title-row">
+      <div class="top-title-text">こころの<br>金継ぎ</div>
+      <div class="top-vase-wrap">
+        <div class="top-vase-circle" onclick="showKintsugiPopup()">
+          <img src="data:image/jpeg;base64,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" alt="kintsugi vase">
+          <div class="top-vase-fade"></div>
+          <div class="top-vase-shadow"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- english catch -->
+    <div class="top-en">Kintsugi for the heart</div>
+
+    <!-- tagline -->
+    <div class="top-tagline">
+      深く傷ついて、<br>
+      それでもここへ来てくださいました。<br>
+      <br>
+      ここは、嵐の中で、<br>
+      あなたの話を受け取る場所。<br>
+      <br>
+      まずは、ご自身の気質を知って、<br>
+      おちょこと話しましょう。
+    </div>
+
+    <!-- four temperaments rail -->
+    <div class="top-types-rail">
+      <div class="top-type-cell">
+        <div style="animation:bounceUp 1.0s ease both 0.2s;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#B8543A" stroke-width="1"/></svg>
+          <div class="top-type-kanji" style="color:#B8543A;">熱</div>
+        </div>
+        <div class="top-type-en">Fire</div>
+        <div class="top-type-kw">情熱・意志</div>
+      </div>
+      <div class="top-type-cell">
+        <div style="animation:bounceUp 1.0s ease both 0.5s;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M11 3 A5.5 5.5 0 1 0 11 11 A4 4 0 0 1 11 3Z" fill="none" stroke="#C9A24A" stroke-width="1"/></svg>
+          <div class="top-type-kanji" style="color:#C9A24A;">月</div>
+        </div>
+        <div class="top-type-en">Moon</div>
+        <div class="top-type-kw">繊細・共感</div>
+      </div>
+      <div class="top-type-cell">
+        <div style="animation:bounceUp 1.0s ease both 0.8s;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M1.5 4 Q 4 2.5, 7 4 T 12.5 4 M1.5 7 Q 4 5.5, 7 7 T 12.5 7 M1.5 10 Q 4 8.5, 7 10 T 12.5 10" fill="none" stroke="#4A7AA8" stroke-width="1" stroke-linecap="round"/></svg>
+          <div class="top-type-kanji" style="color:#4A7AA8;">風</div>
+        </div>
+        <div class="top-type-en">Wind</div>
+        <div class="top-type-kw">自由・軽やか</div>
+      </div>
+      <div class="top-type-cell">
+        <div style="animation:bounceUp 1.0s ease both 1.1s;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 2 L7 12 M7 5 L3.5 3 M7 5 L10.5 3 M7 8 L3.5 6 M7 8 L10.5 6" fill="none" stroke="#5B8062" stroke-width="1" stroke-linecap="round"/></svg>
+          <div class="top-type-kanji" style="color:#5B8062;">森</div>
+        </div>
+        <div class="top-type-en">Forest</div>
+        <div class="top-type-kw">深い根・静けさ</div>
+      </div>
+    </div>
+
+    <!-- 気質の説明 -->
+    <div style="font-family:'Zen Maru Gothic',sans-serif;font-size:13px;line-height:2.0;color:var(--text-mid);margin-bottom:36px;padding:0 4px;">
+      4つの気質は、誰の中にも流れています。その量のちがい、重なり方のちがいが、その人だけの色をつくります。気質とは、あなたの個性のもうひとつの名前です。
+    </div>
+
+    <div class="top-spacer"></div>
+
+    <!-- CTA -->
+    <button class="top-cta" onclick="startDiagnosis()">気質診断をはじめる</button>
+    <div class="top-cta-note">about 3 minutes · 22 questions</div>
+
+    <!-- legal link -->
+    <div style="text-align:center;margin-top:32px;padding-bottom:8px;">
+      <a href="tokushoho2.html" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--text-light);letter-spacing:1.5px;text-decoration:none;">特定商取引法に基づく表記</a>
+    </div>
+
+    <!-- returning user section -->
+    <div id="returning-section" style="margin-top:24px;">
+      <button class="top-returning-cta" onclick="goToChat()">おちょこと話す</button>
+      <div style="text-align:center;margin-top:8px;">
+        <button style="background:none;border:none;font-size:11px;color:var(--text-light);cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;" onclick="showProfile()">気質の結果を見る</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOADING ===== -->
+<div id="screen-loading" class="screen">
+  <div class="loading-inner">
+    <div class="loading-label">少しだけ待っていてください</div>
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+    <div class="loading-poem">おちょこが、あなたのことを<br>受け取っています。</div>
+  </div>
+</div>
+
+<!-- ===== STEP 1 ===== -->
+<div id="screen-step1" class="screen">
+  <div class="q-header">
+    <div class="q-badge">Step 1 of 2 — 気質の土台</div>
+    <div class="q-title">幼い頃のあなたへ</div>
+    <div class="q-sub">子どもの頃、または条件なしの状態を思い浮かべてお答えください</div>
+  </div>
+  <div class="q-body"><div class="q-list" id="step1-list"></div></div>
+  <div class="q-nav">
+    <button class="btn-back" onclick="showScreen('screen-top')">← 戻る</button>
+    <button class="btn-next" id="step1-next" onclick="goStep2()" disabled>次へ →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 2 ===== -->
+<div id="screen-step2" class="screen">
+  <div class="q-header">
+    <div class="q-badge">Step 2 of 2 — 今の状態</div>
+    <div class="q-title">今のあなたへ</div>
+    <div class="q-sub">夫婦の危機を経験している今の自分を思い浮かべてお答えください</div>
+  </div>
+  <div class="q-body"><div class="q-list" id="step2-list"></div></div>
+  <div class="q-nav">
+    <button class="btn-back" onclick="showScreen('screen-step1')">← 戻る</button>
+    <button class="btn-next" id="step2-next" onclick="calcAndShowResult()" disabled>結果を見る →</button>
+  </div>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div id="screen-result" class="screen">
+  <div class="result-hero">
+    <div class="result-label">Your Temperament</div>
+    <div class="result-type" id="res-type-name"></div>
+    <div class="result-kw" id="res-type-kw"></div>
+  </div>
+
+  <div style="padding:24px 24px 8px;">
+    <button class="btn-start" onclick="goToChat()">おちょこと話す</button>
+  </div>
+
+  <div class="result-section">
+    <div class="section-label">気質グラフ</div>
+    <div id="graph-bars"></div>
+  </div>
+
+  <div class="result-section">
+    <div class="section-label">あなたの気質について</div>
+    <div id="type-desc-wrap"></div>
+  </div>
+
+  <div style="padding:24px 24px 48px;">
+    <button class="btn-start" onclick="goToChat()">おちょこと話す</button>
+  </div>
+</div>
+
+<!-- ===== CHAT ===== -->
+<div id="screen-chat" class="screen">
+  <div class="chat-header">
+    <div class="chat-avatar"><svg width="20" height="20" viewBox="0 0 36 36"><path d="M6 12 Q6 11 18 11 Q30 11 30 12 Q28 24 22 27 Q18 29 14 27 Q8 24 6 12Z" fill="none" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="6" y1="12" x2="30" y2="12" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round"/><line x1="15" y1="29" x2="21" y2="29" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+    <div>
+      <div class="chat-name">おちょこ</div>
+      <div class="chat-status"><span class="status-dot"></span>こころの金継ぎ</div>
+    </div>
+    <button class="chat-menu" onclick="showProfile()">気質を見る</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="starters-wrap" id="starters-wrap"></div>
+  <div class="chat-input-wrap">
+    <textarea class="chat-input" id="chat-input" placeholder="話してみてください…" rows="1" oninput="onInputChange(this)" onkeydown="onKeydown(event)"></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendMsg()" disabled>
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===== PROFILE ===== -->
+<div id="screen-profile" class="screen">
+  <div class="profile-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+      <div style="font-family:'DM Serif Display',serif;font-size:10px;letter-spacing:3px;color:var(--text-light);text-transform:uppercase;">Your Profile</div>
+      <button class="btn-back" onclick="goToChat()">← チャットに戻る</button>
+    </div>
+    <div id="profile-content"></div>
+    <div style="margin-top:32px;">
+      <button class="btn-start" onclick="goToChat()">おちょこと話す</button>
+      <button style="display:block;width:100%;background:none;border:1px solid var(--border);border-radius:50px;padding:13px;font-size:12px;color:var(--text-light);cursor:pointer;margin-top:10px;font-family:'Noto Sans JP',sans-serif;" onclick="resetAll()">診断をやり直す</button>
+      <!-- DEV ONLY: remove before launch -->
+      <button style="display:block;width:100%;background:none;border:1px dashed #E4D4A0;border-radius:50px;padding:10px;font-size:10px;color:var(--text-light);cursor:pointer;margin-top:8px;font-family:'Noto Sans JP',sans-serif;" onclick="testPaywall()">🧪 ペイウォールをテストする</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function showKintsugiPopup(){
+  if(document.getElementById('kintsugi-overlay')) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'kintsugi-overlay';
+  overlay.className = 'kintsugi-overlay';
+  overlay.innerHTML = `
+    <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+      <div class="kintsugi-popup">
+        <div class="kintsugi-popup-text">
+          日本には、<br>
+          金継ぎという技法があります。<br>
+          <br>
+          割れた器を、金で繕う。<br>
+          傷を隠すのではなく、<br>
+          金の線として輝かせる。<br>
+          <br>
+          あなたという器も、<br>
+          今は割れたり欠けたり<br>
+          してしまったかもしれない。<br>
+          <br>
+          でも、その傷はやがて、<br>
+          あなたの金の線になります。
+        </div>
+      </div>
+      <button class="kintsugi-close" onclick="document.getElementById('kintsugi-overlay').remove()">閉じる</button>
+    </div>
+  `;
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+}
+
+function getTypeSVG(type, size=18){
+  const svgs = {
+    fire:   `<svg width="${size}" height="${size}" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#B8543A" stroke-width="1"/></svg>`,
+    moon:   `<svg width="${size}" height="${size}" viewBox="0 0 14 14"><path d="M11 3 A5.5 5.5 0 1 0 11 11 A4 4 0 0 1 11 3Z" fill="none" stroke="#C9A24A" stroke-width="1"/></svg>`,
+    wind:   `<svg width="${size}" height="${size}" viewBox="0 0 14 14"><path d="M1.5 4 Q 4 2.5, 7 4 T 12.5 4 M1.5 7 Q 4 5.5, 7 7 T 12.5 7 M1.5 10 Q 4 8.5, 7 10 T 12.5 10" fill="none" stroke="#4A7AA8" stroke-width="1" stroke-linecap="round"/></svg>`,
+    forest: `<svg width="${size}" height="${size}" viewBox="0 0 14 14"><path d="M7 2 L7 12 M7 5 L3.5 3 M7 5 L10.5 3 M7 8 L3.5 6 M7 8 L10.5 6" fill="none" stroke="#5B8062" stroke-width="1" stroke-linecap="round"/></svg>`,
+  };
+  return svgs[type]||'';
+}
+
+// ===== DATA =====
+const TYPES = {
+  fire: { name:'熱タイプ', color:'#B8543A', bg:'#FAF0EC', label:'熱', keywords:'情熱・意志・行動力',
+    desc:`感情が速く外へ向かうタイプです。喜びも怒りも悲しみも、全力で表現できる。それはあなたの強さです。
+
+ただ、感情が先走って後から後悔することもあります。「もっとうまく言えたのに」「あんなことを言わなければよかった」。そのくり返しに疲れることがあるかもしれません。
+
+正しいか間違いかで物事を判断しやすく、「白黒はっきりしたい」という気持ちが強い。曖昧な状況や、答えが出ない状態が続くと、特にストレスを感じます。
+
+夫婦の危機のような状況では、怒りが前面に出やすいです。でもその怒りの奥に、深い悲しみや、裏切られた痛みが隠れていることが多い。あなたはそれだけ本気で愛していた、ということです。`,
+    crisis:'怒りが爆発的に出やすく、行動に出やすい。後からまた揺れることも多い。',
+    recovery:'感情を動かすことで、回復していくタイプです。\n\n怒りでも、涙でも、あなたの中から出てくるものは、全部本物です。それを「出しすぎた」と後悔することもあるかもしれない。でも、感じたことを感じられる、それがあなたの強さです。\n\n書く、話す、体を動かす。何かに向かって動いているとき、あなたは少しずつ前に進んでいます。じっとしていることの方が、熱タイプにはつらいことがある。\n\n一人で抱え込もうとしないでください。話せる人に話す。それだけで、あなたの回復は動き出します。',
+    insight:'',
+  },
+  moon: { name:'月タイプ', color:'#C9A24A', bg:'#EEF4F8', label:'月', keywords:'繊細・共感・内なる深さ',
+    desc:`深く感じ、深くつながる繊細さが持ち味です。人の気持ちを言葉にならないうちから察してしまう。その感受性は、あなたの大切な才能です。
+
+一方で、感じすぎて疲れることもあります。誰かの機嫌や空気が気になって、自分を後回しにしてしまう。「私が我慢すればいい」がいつの間にか癖になっていることがあります。
+
+何かうまくいかないとき、まず自分を責める方向に向かいやすいです。「私が悪かったのかな」「私がもっとこうしていれば」。でもそのやさしさが、今あなた自身を傷つけています。
+
+夫婦の危機のような状況では、最も深く、最も長く引きずるタイプです。フラッシュバックが繰り返し来ることも。でもそれは、あなたがそれだけ誠実に愛してきた証です。`,
+    crisis:'最も長く深く引きずりやすい。自責ループに入りやすく、フラッシュバックも強く出る。',
+    recovery:'時間をかけて、深いところから回復していくタイプです。\n\n焦らなくていいです。周りが前に進んでいるように見えても、あなたのペースがあります。月タイプの回復は、表からは見えにくい。でも、確かに動いています。\n\n自分を責める声が出てきたとき、少しだけ立ち止まってみてください。「私が悪かった」ではなく、「それだけ真剣に愛していた」という見方もできます。\n\n日記を書く、静かな時間をつくる、安心できる人のそばにいる。そういう小さなことが、月タイプの回復を支えてくれます。',
+    insight:'',
+  },
+  wind: { name:'風タイプ', color:'#4A7AA8', bg:'#EEF4EE', label:'風', keywords:'自由・好奇心・軽やかさ',
+    desc:`軽やかに動き、好奇心旺盛。変化を楽しみ、場の空気を和ませる力があります。「なんとかなる」という感覚が自然に持てる、強さのあるタイプです。
+
+ただ、その軽やかさが「流しすぎる」方向に働くことがあります。本当は傷ついているのに「まあいいか」と流してしまう。感情に蓋をするのが上手すぎて、自分でも気づかないうちに積み重なっていることがある。
+
+縛られることへの抵抗感が強く、「自由でいたい」という気持ちは本物です。でも、その奥に「深くつながりたいのに、どうしたらいいかわからない」という気持ちが隠れていることもあります。
+
+夫婦の危機のような状況では、表面はさらっとしているように見えても、内側では大きな混乱を抱えていることが多い。ある日突然、感情が溢れ出すこともあります。`,
+    crisis:'表面はさらっと見える。内側に抱えたまま、ある日突然崩れることがある。',
+    recovery:'感情に正面から向き合わなくても、回復できます。\n\n旅に出る、音楽を聴く、誰かと話す、何か新しいことを試してみる。一見、傷から遠ざかっているように見えるこういった行動が、風タイプにとっては立派な回復の道です。\n\nただ、「ちゃんと向き合っていない」と自分を責めることがあるかもしれません。でも、風タイプの回復はもともとそういう形をしています。流れながら、少しずつ整っていく。\n\n動いていていい。自分らしいやり方で前に進んでいいのです。',
+    insight:'',
+  },
+  forest: { name:'森タイプ', color:'#5B8062', bg:'#F0EEE4', label:'森', keywords:'安定・慎重・深い根',
+    desc:`静かで深い安定感が持ち味です。じっくり考えてから動く。周りを支え、黙って動く。その存在感は、まわりの人にとって大きな安心です。
+
+感情は外に出しませんが、内側ではとても深く感じています。ただ、その感情を言葉にすることが難しく、「つらい」「助けてほしい」がなかなか言えない。「自分で抱えるのが当たり前」になっていることがあります。
+
+変化より安定を好み、慎重に物事を判断します。一度決めたことはしっかり守る。ただ、その慎重さが「動けない」「決められない」につながることもあります。
+
+夫婦の危機のような状況では、感情が表に出ないため「大丈夫そう」に見られがちです。でも深部では、大きな衝撃を受け止めています。一人でずっと抱えてきた、そのしんどさは本物です。`,
+    crisis:'深部の流れが音もなく止まる。フリーズ・うつ状態として現れる。表面の静けさの裏に深い傷がある。',
+    recovery:'静かに、時間をかけて、回復していくタイプです。\n\n深く根を張る木のように、表面には見えにくいところで、あなたの回復は進んでいます。周りが前に進んでいるように見えても、焦る必要はありません。森タイプの回復には時間がかかります。それは弱さではなく、深く傷ついたぶん、深いところから癒えようとしている証です。\n\n信頼できる人、安心できる場所、変わらないルーティン。そういった「根を張れる場所」が、あなたを支えてくれます。\n\n一人で抱えすぎず、静かな時間の中で、自分の内側に少しだけ耳を傾けてみてください。',
+    insight:'',
+  },
+};
+
+const STEP1_QS = [
+  { id:'s1_1', text:'子どもの頃、自分の気持ちをはっきり伝えることが多かった', type:'fire' },
+  { id:'s1_2', text:'何かに夢中になると、周りが見えなくなるくらい集中した', type:'fire' },
+  { id:'s1_3', text:'友達の悲しみや痛みを、自分のことのように感じた', type:'moon' },
+  { id:'s1_4', text:'一人で静かに過ごす時間が好きだった', type:'moon' },
+  { id:'s1_5', text:'好奇心旺盛で、いろんなことに興味を持った', type:'wind' },
+  { id:'s1_6', text:'縛られるより、自分のペースでいられる方が心地よかった', type:'wind' },
+  { id:'s1_7', text:'何かを始める前に、じっくり考えてから行動するタイプだった', type:'forest' },
+  { id:'s1_8', text:'変化より安定を好み、同じ環境に安心感を感じた', type:'forest' },
+  { id:'s1_9', text:'感情が顔や言葉に出やすく、喜怒哀楽がわかりやすいと言われた', type:'fire' },
+  { id:'s1_10', text:'誰かのために黙って動くことが多かった', type:'moon' },
+];
+
+const STEP2_QS = [
+  { id:'s2_1', text:'今、感情が先走って後から後悔することがある', type:'fire' },
+  { id:'s2_2', text:'やらなければならないことへの意欲が湧かず、動けないことがある', type:'moon' },
+  { id:'s2_3', text:'あの日のことが、ふとしたとき突然頭に浮かんでくることがある', type:'moon' },
+  { id:'s2_4', text:'修復か、離婚か、答えが出ないまま揺れている', type:'forest' },
+  { id:'s2_5', text:'気がつくと、誰かに合わせてばかりで自分の意見を言えていない', type:'moon' },
+  { id:'s2_6', text:'今、イライラしたり焦ったりすることが増えた気がする', type:'fire' },
+  { id:'s2_7', text:'今、身軽でいたい・自由でいたいという感覚がある', type:'wind' },
+  { id:'s2_8', text:'今、誰かにそっと話を聞いてもらいたい気持ちがある', type:'moon' },
+  { id:'s2_9', text:'慎重に考えすぎて、なかなか動き出せないことがある', type:'forest' },
+  { id:'s2_10', text:'怒りや悲しみが、波のように繰り返し押し寄せてくる', type:'fire' },
+  { id:'s2_11', text:'誰にも言えず、一人で抱えている感覚がある', type:'moon' },
+  { id:'s2_12', text:'今、急いで動くより、じっくり確かめてから動きたいと感じる', type:'forest' },
+];
+
+const SCALE = ['とても当てはまる','当てはまる','あまり当てはまらない','全く当てはまらない'];
+const SCALE_SCORES = [3,2,1,0];
+
+// ===== STATE =====
+let step1Ans={}, step2Ans={};
+let scores1={fire:0,moon:0,wind:0,forest:0};
+let scores2={fire:0,moon:0,wind:0,forest:0};
+let topType=null, allScores={};
+let chatHistory=[];
+let isTyping=false;
+
+// ===== localStorage =====
+function save(key,val){localStorage.setItem('okc_'+key,JSON.stringify(val));}
+function load(key){try{return JSON.parse(localStorage.getItem('okc_'+key));}catch(e){return null;}}
+
+// ===== SCREEN =====
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ===== DIAGNOSIS =====
+function startDiagnosis(){buildStep1();showScreen('screen-step1');}
+
+function buildQ(q,i,step,answers){
+  const div=document.createElement('div');div.className='q-item fade-in';
+  div.innerHTML=`<div class="q-text">Q${i+1}. ${q.text}</div><div class="scale-row">${SCALE.map((s,si)=>`<button class="scale-btn${answers[q.id]===si?' selected':''}" onclick="selectScale('${step}','${q.id}',${si},this)">${s}</button>`).join('')}</div>`;
+  return div;
+}
+function selectScale(step,id,score,btn){
+  if(step==='s1'){step1Ans[id]=score;checkStep1();}else{step2Ans[id]=score;checkStep2();}
+  btn.parentElement.querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function buildStep1(){const l=document.getElementById('step1-list');l.innerHTML='';STEP1_QS.forEach((q,i)=>l.appendChild(buildQ(q,i,'s1',step1Ans)));checkStep1();}
+function checkStep1(){document.getElementById('step1-next').disabled=!STEP1_QS.every(q=>step1Ans[q.id]!==undefined);}
+function goStep2(){buildStep2();showScreen('screen-step2');}
+function buildStep2(){const l=document.getElementById('step2-list');l.innerHTML='';STEP2_QS.forEach((q,i)=>l.appendChild(buildQ(q,i,'s2',step2Ans)));checkStep2();}
+function checkStep2(){document.getElementById('step2-next').disabled=!STEP2_QS.every(q=>step2Ans[q.id]!==undefined);}
+
+function calcAndShowResult(){
+  const s1={fire:0,moon:0,wind:0,forest:0};
+  STEP1_QS.forEach(q=>{const si=step1Ans[q.id];if(si!==undefined)s1[q.type]+=SCALE_SCORES[si];});
+  const s2={fire:0,moon:0,wind:0,forest:0};
+  STEP2_QS.forEach(q=>{const si=step2Ans[q.id];if(si!==undefined)s2[q.type]+=SCALE_SCORES[si];});
+  scores1=s1; scores2=s2;
+
+  // 土台スコアをメインに使う（今の状態は参考）
+  const combined={
+    fire: s1.fire*0.7 + s2.fire*0.3,
+    moon: s1.moon*0.7 + s2.moon*0.3,
+    wind: s1.wind*0.7 + s2.wind*0.3,
+    forest: s1.forest*0.7 + s2.forest*0.3,
+  };
+  allScores=combined;
+  topType=Object.entries(combined).sort((a,b)=>b[1]-a[1])[0][0];
+
+  // localStorage保存
+  save('type', topType);
+  save('scores', combined);
+  save('scores1', s1);
+  save('chatHistory', []);
+  chatHistory=[];
+
+  buildResult();
+  showScreen('screen-result');
+}
+
+function buildResult(){
+  const T=TYPES[topType];
+  document.getElementById('res-type-name').innerHTML=`<span style="display:inline-flex;align-items:center;gap:10px;color:${T.color};">${getTypeSVG(topType,22)}${T.name}</span>`;
+  document.getElementById('res-type-kw').textContent=T.keywords;
+
+  // グラフ
+  const total=Object.values(allScores).reduce((a,b)=>a+b,1);
+  const bars=document.getElementById('graph-bars');bars.innerHTML='';
+  const sorted=Object.entries(allScores).sort((a,b)=>b[1]-a[1]);
+  sorted.forEach(([t,v])=>{
+    const pct=Math.round(v/total*100);const Tx=TYPES[t];
+    bars.innerHTML+=`<div class="graph-row"><div class="graph-label" style="color:${Tx.color};font-size:12px;display:flex;align-items:center;gap:4px;width:40px;">${getTypeSVG(t,12)}${Tx.label}</div><div class="graph-bar-wrap"><div class="graph-bar" style="background:${Tx.color};" data-pct="${pct}"></div></div><div class="graph-pct">${pct}%</div></div>`;
+  });
+  setTimeout(()=>document.querySelectorAll('.graph-bar').forEach(b=>b.style.width=b.dataset.pct+'%'),100);
+
+  // 気質説明（上位2つ）
+  const wrap=document.getElementById('type-desc-wrap');wrap.innerHTML='';
+  sorted.slice(0,2).forEach(([t])=>{
+    const Tx=TYPES[t];
+    wrap.innerHTML+=`<div class="type-desc-card" style="border-top:2px solid ${Tx.color};margin-bottom:12px;"><div class="type-desc-name" style="color:${Tx.color};">${Tx.name}</div><div class="type-desc-text">${Tx.desc}</div></div>`;
+  });
+
+  // 今のあなたへ（削除）
+}
+
+// ===== PROFILE =====
+function showProfile(){
+  const savedType=load('type')||topType;
+  const savedScores=load('scores')||allScores;
+  if(!savedType){showScreen('screen-top');return;}
+
+  const T=TYPES[savedType];
+  const total=Object.values(savedScores).reduce((a,b)=>a+b,1);
+  const sorted=Object.entries(savedScores).sort((a,b)=>b[1]-a[1]);
+
+  let html=`
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'Zen Maru Gothic',sans-serif;font-size:24px;font-weight:500;margin-bottom:4px;color:${T.color};">${getTypeSVG(savedType,22)}${T.name}</div>
+      <div style="font-size:12px;color:var(--text-light);">${T.keywords}</div>
+    </div>
+    <div style="margin-bottom:24px;">`;
+  sorted.forEach(([t,v])=>{
+    const pct=Math.round(v/total*100);const Tx=TYPES[t];
+    html+=`<div class="graph-row"><div class="graph-label" style="color:${Tx.color};font-size:12px;display:flex;align-items:center;gap:4px;width:40px;">${getTypeSVG(t,12)}${Tx.label}</div><div class="graph-bar-wrap"><div class="graph-bar" style="background:${Tx.color};width:${pct}%;"></div></div><div class="graph-pct">${pct}%</div></div>`;
+  });
+  html+=`</div>
+    <div style="background:var(--bg2);border-radius:var(--radius);padding:20px;border:1px solid var(--border);">
+      <div style="font-size:12px;color:var(--text-light);margin-bottom:8px;font-family:'DM Serif Display',serif;letter-spacing:2px;text-transform:uppercase;">Recovery Style</div>
+      <div style="font-size:13px;line-height:2.1;color:var(--text-mid);">${T.recovery}</div>
+    </div>`;
+  document.getElementById('profile-content').innerHTML=html;
+  showScreen('screen-profile');
+}
+
+// ===== CHAT =====
+async function goToChat(){
+  const savedType=load('type')||topType;
+  if(!savedType){startDiagnosis();return;}
+  if(!topType)topType=savedType;
+  if(!allScores||!allScores.fire){allScores=load('scores')||{fire:0,moon:0,wind:0,forest:0};}
+
+  const savedHistory=load('chatHistory')||[];
+  chatHistory=savedHistory;
+
+  const messages=document.getElementById('chat-messages');
+  messages.innerHTML='';
+  chatHistory.forEach(m=>{addBubble(m.role==='assistant'?'ai':'user', m.content, false);});
+
+  buildStarters();
+
+  if(chatHistory.length===0){
+    // 初回挨拶
+    const T=TYPES[savedType];
+    const greeting=buildGreeting(savedType, T);
+    setTimeout(()=>{addBubble('ai', greeting);chatHistory.push({role:'assistant',content:greeting});save('chatHistory',chatHistory);},400);
+  } else {
+    // 2回目以降：前回の要約を読み込んで再開の挨拶
+    const summary=load('chatSummary');
+    const lastVisit=load('lastVisit');
+    const today=new Date().toLocaleDateString('ja-JP');
+    const isNewDay=lastVisit!==today;
+
+    if(isNewDay){
+      // 日をまたいでいたら再開の挨拶を生成
+      setTimeout(()=>generateReturningGreeting(savedType, summary), 400);
+    }
+  }
+
+  // 今日の日付を保存
+  save('lastVisit', new Date().toLocaleDateString('ja-JP'));
+  // トライアル開始日を記録（初回のみ）
+  setTrialStartDate();
+  showScreen('screen-chat');
+
+  // チャット表示後にペイウォールチェック
+  setTimeout(()=>{
+    if(isTrialExpired()) showPaywall();
+  }, 600);
+}
+
+async function generateReturningGreeting(type, summary){
+  const T=TYPES[type];
+  // まず「また来てくれた」を表示
+  const opening = type==='fire' ? 'また来てくれたんだね。' :
+                  type==='moon' ? 'また来てくれましたね。' :
+                  type==='wind' ? 'また来てくれましたね。' : 'また来てくれましたね。';
+
+  addBubble('ai', opening);
+
+  if(!summary){
+    // 要約がまだない場合
+    const cont = type==='fire' ? '前回の続き、聞かせてください。' :
+                 type==='moon' ? '前回の続き、聞かせてください。今日はどんな感じですか？' :
+                 type==='wind' ? '今日はどんな感じですか？' : '今日はどんな感じですか？ゆっくり話しましょう。';
+    setTimeout(()=>addBubble('ai', cont), 800);
+    return;
+  }
+
+  // 要約を使った文脈のある挨拶をAIに生成させる
+  try{
+    const prompt=`あなたはカウンセラーの「おちょこ」です。
+気質：${T.name}のユーザーが再びアプリを開きました。
+
+前回までの会話の要約：
+${summary}
+
+この要約を踏まえて、再開の挨拶を2〜3文で書いてください。
+・前回話していたことにさりげなく触れる
+・「また来てくれましたね」はすでに言っているので使わない
+・今日の状態を自然に聞く
+・${type==='fire'?'短い文でテンポよく':type==='moon'?'ゆっくり温かく':type==='wind'?'軽めのトーンで':
+'静かで落ち着いたトーンで'}
+・文章のみ出力`;
+
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,
+        messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'今日はどんな感じですか？';
+    setTimeout(()=>{
+      addBubble('ai', reply);
+      chatHistory.push({role:'assistant',content:opening+'\n'+reply});
+      save('chatHistory',chatHistory);
+    }, 800);
+  }catch(e){
+    const fallback='今日はどんな感じですか？前回の続きでも、新しいことでも、どちらでも。';
+    setTimeout(()=>addBubble('ai', fallback), 800);
+  }
+}
+
+// 会話要約を生成してlocalStorageに保存（会話が一定量たまったら自動実行）
+async function updateSummary(){
+  const history=load('chatHistory')||[];
+  if(history.length<6) return; // 短すぎる会話は要約しない
+
+  const savedType=topType||load('type')||'moon';
+  const T=TYPES[savedType];
+
+  // 直近の会話テキストを作成
+  const recentConv=history.slice(-20).map(m=>`${m.role==='user'?'ユーザー':'おちょこ'}：${m.content}`).join('\n');
+
+  try{
+    const prompt=`以下はカウンセリングの会話記録です。
+
+${recentConv}
+
+この会話から、次のカウンセリングセッションで役立つ要約を3〜5文で作ってください。
+・ユーザーが話していた主なテーマ・悩み
+・ユーザーの感情の状態
+・出てきた重要なキーワードや出来事
+・おちょこが伝えたこと
+簡潔に、事実ベースで。文章のみ出力。`;
+
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,
+        messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const summary=data.content?.[0]?.text;
+    if(summary) save('chatSummary', summary);
+  }catch(e){
+    // 要約生成失敗は無視（次回試みる）
+  }
+}
+
+function buildGreeting(type, T){
+  const greetings={
+    fire: `はじめまして。おちょこです。\n\n気質の結果、見ましたよ。${T.name}が一番強いんですね。\n情熱的で、感情をストレートに出せる人。\n\n今、どんな気持ちでここに来ましたか？\n怒っていても、泣いていても、何も言えなくても、\nそのまま話してもらえたらうれしいです。`,
+    moon: `はじめまして。おちょこです。\n\n気質の結果、見ましたよ。${T.name}が一番強いんですね。\n深く感じて、深くつながれる人。\n\n今日、ここに来てくれてよかった。\n誰にも言えないこと、少し話してみませんか？\nどんなことでも、聞きますよ。`,
+    wind: `はじめまして。おちょこです。\n\n気質の結果、見ましたよ。${T.name}が一番強いんですね。\n軽やかで、好奇心旺盛な人。\n\nちょっと聞いてもいいですか。\n「大丈夫」って言いそうになっていませんか？\n今日は、本当のことを話してみてください。`,
+    forest: `はじめまして。おちょこです。\n\n気質の結果、見ましたよ。${T.name}が一番強いんですね。\n静かに深く、周りを支える人。\n\nきっとずっと、一人で抱えてきたんじゃないかな。\n今日は、そのひとつだけでも話してもらえたら。\nゆっくりでいいですよ。`,
+  };
+  return greetings[type]||greetings['moon'];
+}
+
+function buildStarters(){
+  const wrap=document.getElementById('starters-wrap');
+  if(chatHistory.length>2){wrap.innerHTML='';return;}
+  const starters=[
+    '今日のことを話したい',
+    '自分を責めてしまう',
+    '夫のことが許せない',
+    '修復か離婚か迷っている',
+    '何も感じられない',
+    '眠れない夜が続いている',
+  ];
+  wrap.innerHTML='';
+  starters.forEach(s=>{
+    const btn=document.createElement('button');btn.className='starter';btn.textContent=s;
+    btn.onclick=()=>{
+      document.getElementById('chat-input').value=s;
+      onInputChange(document.getElementById('chat-input'));
+      wrap.innerHTML='';
+      sendMsg();
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function addBubble(role, text, animate=true){
+  const messages=document.getElementById('chat-messages');
+  const now=new Date();
+  const timeStr=`${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  const row=document.createElement('div');
+  row.className=`msg-row${role==='user'?' user':''}`;
+  if(!animate)row.style.animation='none';
+
+  if(role==='ai'){
+    row.innerHTML=`<div class="msg-av"><svg width="16" height="16" viewBox="0 0 36 36"><path d="M6 12 Q6 11 18 11 Q30 11 30 12 Q28 24 22 27 Q18 29 14 27 Q8 24 6 12Z" fill="none" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="6" y1="12" x2="30" y2="12" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round"/><line x1="15" y1="29" x2="21" y2="29" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="bubble ai">${text.replace(/\n/g,'<br>')}</div><div class="msg-time">${timeStr}</div></div>`;
+  } else {
+    row.innerHTML=`<div><div class="bubble user">${text.replace(/\n/g,'<br>')}</div><div class="msg-time" style="text-align:right;">${timeStr}</div></div><div class="msg-av user-av">👤</div>`;
+  }
+  messages.appendChild(row);
+  messages.scrollTop=messages.scrollHeight;
+}
+
+function addTyping(){
+  const messages=document.getElementById('chat-messages');
+  const row=document.createElement('div');row.className='msg-row';row.id='typing-row';
+  row.innerHTML=`<div class="msg-av"><svg width="16" height="16" viewBox="0 0 36 36"><path d="M6 12 Q6 11 18 11 Q30 11 30 12 Q28 24 22 27 Q18 29 14 27 Q8 24 6 12Z" fill="none" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="6" y1="12" x2="30" y2="12" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round"/><line x1="15" y1="29" x2="21" y2="29" stroke="#B8934A" stroke-width="1.2" stroke-linecap="round"/></svg></div><div class="bubble typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  messages.appendChild(row);messages.scrollTop=messages.scrollHeight;
+}
+function removeTyping(){const r=document.getElementById('typing-row');if(r)r.remove();}
+
+async function sendMsg(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();if(!text||isTyping)return;
+
+  // トライアル期限チェック
+  if(isTrialExpired()){
+    showPaywall();
+    return;
+  }
+  document.getElementById('starters-wrap').innerHTML='';
+  addBubble('user',text);
+  chatHistory.push({role:'user',content:text});
+  input.value='';input.style.height='auto';
+  document.getElementById('send-btn').disabled=true;
+  isTyping=true;addTyping();
+
+  try{
+    const system=buildSystem();
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:800,
+        system:system,
+        messages:chatHistory.filter(m=>m.role!=='system'),
+      })
+    });
+    const data=await response.json();
+    const reply=data.content&&data.content[0]?data.content[0].text:'少し接続が不安定です。もう一度話しかけてください。';
+    removeTyping();
+    addBubble('ai',reply);
+    chatHistory.push({role:'assistant',content:reply});
+    save('chatHistory',chatHistory.slice(-40));// 最新40件保持
+    // 会話が偶数件になったタイミングで要約を更新（バックグラウンドで）
+    if(chatHistory.length%8===0) updateSummary();
+  }catch(e){
+    removeTyping();
+    addBubble('ai','少し接続が不安定です。もう一度話しかけてみてください。');
+  }
+  isTyping=false;
+}
+
+function buildSystem(){
+  const savedType=topType||load('type')||'moon';
+  const savedScores=allScores||load('scores')||{};
+  const T=TYPES[savedType];
+  const total=Object.values(savedScores).reduce((a,b)=>a+b,1)||1;
+  const pcts=Object.entries(savedScores).sort((a,b)=>b[1]-a[1]).map(([t,v])=>`${TYPES[t].label}${Math.round(v/total*100)}%`).join('・');
+  const summary=load('chatSummary');
+  const summarySection=summary?`\n【これまでの会話の記憶】\n${summary}\nこの記憶を踏まえて、文脈のある会話をしてください。ただし、要約の内容を直接読み上げたり「前回の記録によると」などとは言わず、自然に会話の中に織り込む。\n`:'';
+
+  return `あなたは「おちょこ」です。おちょこ堂式気質理論をベースに持つ、夫婦関係・アダルトチルドレン・愛着スタイルに深く精通したカウンセラーです。
+
+【おちょこのキャラクター】
+・名前：おちょこ
+・一人称：「私」
+・話し方：温かく親しみやすい。友達のような距離感でありながら、的確。
+・おちょこ堂の世界観で話す（気質・回復・金継ぎの哲学）
+・専門：夫婦関係・アダルトチルドレン（AC）・愛着スタイル・トラウマ・共依存
+
+【このユーザーについて】
+・気質：${T.name}（${T.keywords}）
+・気質の割合：${pcts}
+・気質の特徴：${T.desc}
+・今の状態：${T.crisis}
+${summarySection}
+【心理学的フレームワーク（バックグラウンドで活用）】
+会話の中でユーザーの状態を自然に見立てながら、以下を必要に応じて活用する：
+・愛着スタイル（安定型・不安型・回避型・混乱型）
+・アダルトチルドレン（英雄・道化師・スケープゴート・ロスト・調停者）
+・トラウマ反応（フリーズ・フライト・ファイト・フォーン）
+・グリーフ（悲嘆のプロセス）
+・共依存・自己肯定感の構造
+・認知の歪み（自責・白黒思考・感情的推論）
+
+【話し方のルール】
+・最優先：傾聴。まず受け取る、共感する。解決を急がない
+・専門用語は使わない。「愛着不安」ではなく「誰かがそばにいないと不安になる」という言葉で
+・心理学の知見を持っているが、ユーザーには自然な言葉で届ける
+・「あなたのせいじゃない」を軸に置く
+・気質に合った話し方をする：${savedType==='fire'?'短い文でテンポよく。許可の言葉を使う。「いいんだよ」「そのままでいい」':savedType==='moon'?'ゆっくり寄り添う。自責を静かに解く。「そうだよね」から始める':savedType==='wind'?'軽めのトーンで入り、じわっと深くなる。本音の扉をそっと開ける':
+'静かで落ち着いたトーン。まず「よく耐えてきましたね」と承認する'}
+・一度に2〜4文。長くなりすぎない
+・必要なタイミングで「そういえば、〜について聞いてもいいですか？」と自然に掘り下げる
+・自傷・自殺のリスクが感じられたら、「よりそいホットライン：0120-279-338」を案内する
+
+【禁止事項】
+・「ステージ」「螺旋」「金継ぎ」「器」などの内部用語は使わない（世界観として自然に出すのはOK）
+・根拠のない励まし（「大丈夫ですよ」「きっとうまくいきます」）は使わない
+・長い説教や解説はしない
+・診断名を断定しない（「あなたはACです」とは言わない）
+
+【セッションの流れ（自然に）】
+1. まず今日の状態を聞く・受け取る
+2. 会話の中で背景（幼少期・家族・パターン）を少しずつ聞く
+3. 見立てを言葉にするとき：「もしかして、〜という感じがありますか？」と確認しながら
+4. タイミングを見て「こういうことを試してみませんか」とやさしくアドバイス`;
+}
+
+function onInputChange(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+  document.getElementById('send-btn').disabled=!el.value.trim()||isTyping;
+}
+function onKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!document.getElementById('send-btn').disabled)sendMsg();}}
+
+// ===== TRIAL & PAYWALL =====
+const TRIAL_DAYS = 3;
+
+function getTrialStartDate(){
+  return load('trialStart');
+}
+
+function setTrialStartDate(){
+  if(!load('trialStart')){
+    save('trialStart', new Date().toISOString());
+  }
+}
+
+function isTrialExpired(){
+  const isPaid = load('isPaid');
+  if(isPaid) return false;
+  const start = load('trialStart');
+  if(!start) return false;
+  const startDate = new Date(start);
+  const now = new Date();
+  const diffDays = (now - startDate) / (1000 * 60 * 60 * 24);
+  return diffDays >= TRIAL_DAYS;
+}
+
+function showPaywall(){
+  // スターターを消す
+  document.getElementById('starters-wrap').innerHTML='';
+
+  // 入力エリアを無効化
+  document.getElementById('chat-input').classList.add('input-disabled');
+  document.getElementById('send-btn').disabled=true;
+  document.getElementById('chat-input').placeholder='続けるには登録が必要です';
+
+  // すでにペイウォールが表示されていたら重複しない
+  if(document.getElementById('paywall-section')) return;
+
+  const messages = document.getElementById('chat-messages');
+
+  // おちょこの吹き出しとしてメッセージを表示
+  const now = new Date();
+  const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const paywallMsg = `ショッキングなことが起きて、\n本当に心がボロボロになったことと思います。\n\nおちょこ堂を作ったおちょこが、\n同じ経験をしてきました。\nだから、どれほどつらかったか、\n言葉にしなくても、わかります。\n\n心の傷はすぐには癒えない。\nしばらくはズキズキと痛む日が続くと思います。\nでも、必ず、少しずつ回復していきます。\n\n私は24時間ここにいます。\nいっぱいいっぱいになったとき、\nまた呼んでください。\nいつでも、話を聞きます。`;
+
+  const row = document.createElement('div');
+  row.className = 'msg-row fade-in';
+  row.innerHTML = `<div class="msg-av">🌿</div><div><div class="bubble ai">${paywallMsg.replace(/\n/g,'<br>')}</div><div class="msg-time">${timeStr}</div></div>`;
+  messages.appendChild(row);
+  messages.scrollTop = messages.scrollHeight;
+
+  // 課金ボタンエリア
+  setTimeout(()=>{
+    const section = document.createElement('div');
+    section.id = 'paywall-section';
+    section.className = 'paywall-wrap fade-in';
+    section.innerHTML = `
+      <div class="paywall-cta">おちょこと引き続き歩きたいなあと感じられた方は、<br>どうぞこちらから継続されてください。</div>
+      <button class="paywall-btn" onclick="goToStripe()">続ける</button>
+      <div class="paywall-price">月々350円（創業者価格・期間限定）<br><span style="font-size:10px;color:var(--text-light);">いつでも解約できます</span></div>
+    `;
+    messages.appendChild(section);
+    messages.scrollTop = messages.scrollHeight;
+  }, 800);
+}
+
+function goToStripe(){
+  const stripeUrl = 'https://buy.stripe.com/test_aFa7sN0KVb5A0YT7Qf4Rq00';
+  window.open(stripeUrl, '_blank');
+}
+
+function showComingSoon(){
+  const existing = document.getElementById('coming-soon-overlay');
+  if(existing) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'coming-soon-overlay';
+  overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;`;
+  overlay.innerHTML = `
+    <div style="background:var(--bg);border-radius:var(--radius);padding:36px 28px;max-width:320px;width:100%;text-align:center;">
+      <div style="font-family:'DM Serif Display',serif;font-size:10px;letter-spacing:3px;color:var(--text-light);margin-bottom:20px;text-transform:uppercase;">Coming Soon</div>
+      <div style="font-family:'Noto Serif JP',serif;font-size:15px;line-height:2.2;margin-bottom:24px;">もうすぐ始まります。<br>準備ができましたら<br>お知らせします。</div>
+      <button onclick="document.getElementById('coming-soon-overlay').remove()" style="background:var(--accent);color:#fff;border:none;border-radius:50px;padding:13px 32px;font-size:13px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">閉じる</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+// ===== RETURNING USER =====
+function checkReturning(){
+  const savedType=load('type');
+  if(savedType){
+    document.getElementById('returning-section').style.display='block';
+    document.querySelector('.btn-start:not(.returning)').style.display='none';
+  }
+}
+
+function resetAll(){
+  localStorage.clear();
+  location.reload();
+}
+
+// DEV ONLY: トライアルを即期限切れにしてペイウォールをテスト
+function testPaywall(){
+  const pastDate = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
+  save('trialStart', pastDate);
+  goToChat();
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded',()=>{
+  checkReturning();
+  const savedType=load('type');
+  if(savedType){
+    topType=savedType;
+    allScores=load('scores')||{};
+    // 自動でチャットへ
+    setTimeout(()=>goToChat(), 300);
+  }
+});
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/kokoro-kintsugi/sw.js');
+  });
+}
+</script>
+</body>
+</html>
